@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.egg
 *.egg-info
 *.pyc
@@ -122,4 +121,6 @@ ENV/
 
 # mypy
 .mypy_cache/
->>>>>>> 436bc99afc73a011734ed9de512ecb8173391d93
+
+# ini files
+*.ini
