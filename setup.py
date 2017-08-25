@@ -20,6 +20,7 @@ requires = [
     'waitress',
     'cornice',
     'bcrypt',
+    'pyramid_jwt'
 ]
 
 tests_require = [

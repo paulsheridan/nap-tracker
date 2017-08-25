@@ -1,8 +1,9 @@
 import datetime
 import pyramid.httpexceptions as exc
 
-from cornice.resource import resource
+from cornice.resource import resource, view
 from baby_tracker.models import User
+
 
 @resource(collection_path='/users', path='/users/{id}')
 class UserView(object):
@@ -21,8 +22,10 @@ class UserView(object):
 
     def collection_post(self):
         """Add single user"""
-        user = self.request.json['user']
-        self.request.dbsession.add(User.from_json(user))
+        user_json = self.request.json['user']
+        user = User.from_json(user_json)
+        user.hash_password(user_json['password'])
+        self.request.dbsession.add(user)
         return {'status': 'OK'}
 
     def put(self):

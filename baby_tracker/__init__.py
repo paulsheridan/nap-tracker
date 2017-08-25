@@ -1,7 +1,6 @@
 from pyramid.config import Configurator
 
-from pyramid.authentication import AuthTktAuthenticationPolicy
-from pyramid.config import Configurator
+from pyramid.authorization import ACLAuthorizationPolicy
 
 
 def main(global_config, **settings):
@@ -9,9 +8,11 @@ def main(global_config, **settings):
     """
     config = Configurator(settings=settings)
 
-    authn_policy = AuthTktAuthenticationPolicy(
-        settings['tutorial.secret'], hashalg='sha512')
-    config.set_authentication_policy(authn_policy)
+     # Pyramid requires an authorization policy to be active.
+    config.set_authorization_policy(ACLAuthorizationPolicy())
+    # Enable JWT authentication.
+    config.include('pyramid_jwt')
+    config.set_jwt_authentication_policy('secret')
 
     config.include('cornice')
     config.include('.models')

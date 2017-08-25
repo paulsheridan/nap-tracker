@@ -1,4 +1,6 @@
-from datetime import datetime
+import bcrypt
+
+import datetime
 from sqlalchemy import (
     Column,
     Integer,
@@ -16,14 +18,22 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(Unicode(255), unique=True, nullable=False)
     password = Column(Unicode(255), nullable=False)
-    last_logged = Column(DateTime, default=datetime.utcnow)
+    last_logged = Column(DateTime, default=datetime.datetime.utcnow)
 
     meals = relationship('Meal', backref='user')
     naps = relationship('Nap', backref='user')
 
+    def hash_password(self, pw):
+        self.password = bcrypt.hashpw(pw.encode('utf8'), bcrypt.gensalt())
+        return self.password.decode('utf8')
+
+    def check_password(self, pw):
+        expected_hash = self.password
+        return bcrypt.checkpw(pw.encode('utf8'), expected_hash)
+
     @classmethod
     def from_json(cls, data):
-        return cls(**{k:load_datetime(v) for k, v in data.items()})
+        return cls(**{k:v for k, v in data.items() if k in {'email'}})
 
     def to_json(self):
         to_serialize = ['id', 'email']

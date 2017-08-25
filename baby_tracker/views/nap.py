@@ -4,20 +4,28 @@ import pyramid.httpexceptions as exc
 from cornice.resource import resource
 from baby_tracker.models import Nap
 
+
 @resource(collection_path='/naps', path='/naps/{id}')
 class NapView(object):
 
     def __init__(self, request):
         self.request = request
+        self.logged_in = request.authenticated_userid
 
     def collection_get(self):
-        """Returns list of todays naps"""
-        naps = self.request.dbsession.query(Nap).all()
+        """Returns list of all naps by user."""
+        user_id = self.request.authenticated_userid
+        if not user_id:
+            return exc.HTTPForbidden()
+        naps = self.request.dbsession.query(Nap).filter_by(user_id=user_id)
         naps_json = [nap.to_json() for nap in naps]
         return {'naps': naps_json}
 
     def get(self):
         """Return single nap"""
+        user_id = self.request.authenticated_userid
+        if not user_id:
+            return exc.HTTPForbidden()
         nap_id = int(self.request.matchdict['id'])
         nap = self.request.dbsession.query(Nap).get(nap_id)
         if nap is not None:
