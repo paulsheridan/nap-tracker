@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     Unicode,
     DateTime,
+    LargeBinary,
 )
 
 from sqlalchemy.orm import relationship
@@ -17,7 +18,7 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     email = Column(Unicode(255), unique=True, nullable=False)
-    password = Column(Unicode(255), nullable=False)
+    password = Column(LargeBinary, nullable=False)
     last_logged = Column(DateTime, default=datetime.datetime.utcnow)
 
     meals = relationship('Meal', backref='user')

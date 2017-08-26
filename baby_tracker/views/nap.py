@@ -1,11 +1,13 @@
 import datetime
 import pyramid.httpexceptions as exc
 
+from sqlalchemy import Date, cast
+
 from cornice.resource import resource
 from baby_tracker.models import Nap
 
 
-@resource(collection_path='/naps', path='/naps/{id}')
+@resource(collection_path='/naps', path='/naps/today')
 class NapView(object):
 
     def __init__(self, request):
@@ -22,21 +24,23 @@ class NapView(object):
         return {'naps': naps_json}
 
     def get(self):
-        """Return single nap"""
+        """Return today's naps by user."""
         user_id = self.request.authenticated_userid
         if not user_id:
             return exc.HTTPForbidden()
-        nap_id = int(self.request.matchdict['id'])
-        nap = self.request.dbsession.query(Nap).get(nap_id)
-        if nap is not None:
-            nap_json = nap.to_json()
-            return {'nap': nap_json}
-        raise exc.HTTPNotFound()
+        today = datetime.date.today()
+        # naps = self.request.dbsession.query(Nap).filter_by(user_id=user_id).filter(cast(Nap))
+        naps = self.request.dbsession.query(Nap).filter(cast(Nap.start,Date) == today).all()
+        naps_json = [nap.to_json() for nap in naps]
+        return {'naps': naps_json}
 
     def collection_post(self):
         """Add single nap"""
-        nap = self.request.json['nap']
-        self.request.dbsession.add(Nap.from_json(nap))
+        user_id = self.request.authenticated_userid
+        nap_json = self.request.json['nap']
+        nap = Nap.from_json(nap_json)
+        nap.user_id = user_id
+        self.request.dbsession.add(nap)
         return {'status': 'OK'}
 
     def put(self):
