@@ -1,4 +1,5 @@
 import datetime
+import transaction
 import pyramid.httpexceptions as exc
 
 from cornice.resource import resource, view
@@ -19,8 +20,7 @@ class UserView(object):
             return exc.HTTPForbidden()
         user = self.request.dbsession.query(User).get(user_id)
         if user is not None:
-            user_json = user.to_json()
-            return {'user': user_json}
+            return {'user': user.to_json()}
         raise exc.HTTPNotFound()
 
     def collection_post(self):
@@ -34,18 +34,22 @@ class UserView(object):
     def put(self):
         """Update a single user entry"""
         user_id = int(self.request.matchdict['id'])
+        if not self.logged_in or user_id != self.logged_in:
+            return exc.HTTPForbidden()
         user = self.request.dbsession.query(User).get(user_id)
         if user is not None:
             args = self.request.json
             for key, value in args.items():
                 if args[key] is not None:
                     setattr(user, key, value)
-            self.request.dbsession.commit()
-            return {'status': 'OK'}
+            transaction.commit()
+            return {'user': user.to_json()}
         raise exc.HTTPNotFound()
 
     def delete(self):
         """Delete a single user entry"""
         user_id = int(self.request.matchdict['id'])
+        if not self.logged_in or user_id != self.logged_in:
+            return exc.HTTPForbidden()
         self.request.dbsession.query(User).filter_by(id=user_id).delete()
         return {'status': 'OK'}

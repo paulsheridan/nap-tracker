@@ -57,21 +57,21 @@ class NapView(object):
                 if args[key] is not None:
                     setattr(nap, key, value)
             transaction.commit()
-            return {'status': 'OK'}
+            return {'nap': nap.to_json()}
         raise exc.HTTPNotFound()
 
     def delete(self):
         """Delete a single nap entry"""
         nap_id = int(self.request.matchdict['id'])
         nap = self.request.dbsession.query(User).filter_by(
-            id=self.logged_in).first().naps.filter_by(id=nap_id).first().delete()
+            id=self.logged_in).first().naps.filter_by(id=nap_id).delete()
         if not nap:
             return exc.HTTPNotFound()
         return {'status': 'OK'}
 
 
 @resource(path='/today/naps')
-class TodayView(object):
+class TodayNapView(object):
 
     def __init__(self, request):
         self.request = request

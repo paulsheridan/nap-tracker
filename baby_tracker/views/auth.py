@@ -17,7 +17,6 @@ class AuthView(object):
             }
         return {'result': 'error'}
 
-
     def authenticate(self):
         email = self.request.json['email']
         password = self.request.json['password']
