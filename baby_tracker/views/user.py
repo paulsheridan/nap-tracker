@@ -10,10 +10,13 @@ class UserView(object):
 
     def __init__(self, request):
         self.request = request
+        self.logged_in = request.authenticated_userid
 
     def get(self):
         """Return single user"""
         user_id = int(self.request.matchdict['id'])
+        if not self.logged_in or user_id != self.logged_in:
+            return exc.HTTPForbidden()
         user = self.request.dbsession.query(User).get(user_id)
         if user is not None:
             user_json = user.to_json()

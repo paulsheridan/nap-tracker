@@ -21,8 +21,8 @@ class User(Base):
     password = Column(LargeBinary, nullable=False)
     last_logged = Column(DateTime, default=datetime.datetime.utcnow)
 
-    meals = relationship('Meal', backref='user')
-    naps = relationship('Nap', backref='user')
+    meals = relationship('Meal', backref='user', lazy='dynamic')
+    naps = relationship('Nap', backref='user', lazy='dynamic')
 
     def hash_password(self, pw):
         self.password = bcrypt.hashpw(pw.encode('utf8'), bcrypt.gensalt())
@@ -40,7 +40,7 @@ class User(Base):
         to_serialize = ['id', 'email']
         d = {}
         for attr_name in to_serialize:
-            if isinstance(getattr(self, attr_name), datetime):
+            if isinstance(getattr(self, attr_name), datetime.datetime):
                 d[attr_name] = getattr(self, attr_name).__str__()
             else:
                 d[attr_name] = getattr(self, attr_name)

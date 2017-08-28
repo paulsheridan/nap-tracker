@@ -5,7 +5,7 @@ import pyramid.httpexceptions as exc
 from sqlalchemy import Date, cast
 
 from cornice.resource import resource
-from baby_tracker.models import Nap
+from baby_tracker.models import Nap, User
 
 
 @resource(collection_path='/naps', path='/naps/{id}')
@@ -19,7 +19,7 @@ class NapView(object):
         """Returns list of all naps by user"""
         if not self.logged_in:
             return exc.HTTPForbidden()
-        naps = self.request.dbsession.query(Nap).filter_by(user_id=self.logged_in)
+        naps = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().naps
         naps_json = [nap.to_json() for nap in naps]
         return {'naps': naps_json}
 
@@ -28,8 +28,10 @@ class NapView(object):
         if not self.logged_in:
             return exc.HTTPForbidden()
         nap_id = int(self.request.matchdict['id'])
-        nap = self.request.dbsession.query(Nap).filter_by(
-            user_id=self.logged_in).filter_by(id=nap_id).first()
+        nap = self.request.dbsession.query(User).filter_by(
+            id=self.logged_in).first().naps.filter_by(id=nap_id).first()
+        if not nap:
+            return exc.HTTPNotFound()
         return {'nap': nap.to_json()}
 
     def collection_post(self):
@@ -47,8 +49,8 @@ class NapView(object):
         if not self.logged_in:
             return exc.HTTPForbidden()
         nap_id = int(self.request.matchdict['id'])
-        nap = self.request.dbsession.query(Nap).filter_by(
-            user_id=self.logged_in).filter_by(id=nap_id).first()
+        nap = self.request.dbsession.query(User).filter_by(
+            id=self.logged_in).first().naps.filter_by(id=nap_id).first()
         if nap is not None:
             args = self.request.json
             for key, value in args.items():
@@ -61,12 +63,14 @@ class NapView(object):
     def delete(self):
         """Delete a single nap entry"""
         nap_id = int(self.request.matchdict['id'])
-        self.request.dbsession.query(Nap).filter_by(
-            user_id=self.logged_in).filter_by(id=nap_id).delete()
+        nap = self.request.dbsession.query(User).filter_by(
+            id=self.logged_in).first().naps.filter_by(id=nap_id).first().delete()
+        if not nap:
+            return exc.HTTPNotFound()
         return {'status': 'OK'}
 
 
-@resource(path='/naps/today')
+@resource(path='/today/naps')
 class TodayView(object):
 
     def __init__(self, request):
@@ -77,7 +81,8 @@ class TodayView(object):
         """Return today's naps by user."""
         if not self.logged_in:
             return exc.HTTPForbidden()
-        naps = self.request.dbsession.query(Nap).filter(cast(
-            Nap.start, Date) == datetime.date.today()).filter_by(user_id=self.logged_in)
+        naps = self.request.dbsession.query(User).filter_by(
+            id=self.logged_in).first().naps.filter(
+                cast(Nap.start, Date) == datetime.date.today())
         naps_json = [nap.to_json() for nap in naps]
         return {'naps': naps_json}
