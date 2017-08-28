@@ -22,7 +22,7 @@ class UserView(object):
 
     def collection_post(self):
         """Add single user"""
-        user_json = self.request.json['user']
+        user_json = self.request.json
         user = User.from_json(user_json)
         user.hash_password(user_json['password'])
         self.request.dbsession.add(user)
@@ -33,7 +33,7 @@ class UserView(object):
         user_id = int(self.request.matchdict['id'])
         user = self.request.dbsession.query(User).get(user_id)
         if user is not None:
-            args = self.request.json['user']
+            args = self.request.json
             for key, value in args.items():
                 if args[key] is not None:
                     setattr(user, key, value)

@@ -17,7 +17,7 @@ class Nap(Base):
     id = Column(Integer, primary_key=True)
     start = Column(DateTime, default=datetime.utcnow)
     end = Column(DateTime)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 
     @classmethod
     def from_json(cls, data):
@@ -25,10 +25,10 @@ class Nap(Base):
 
     def to_json(self):
         to_serialize = ['id', 'start', 'end']
-        d = {}
+        nap_dict = {}
         for attr_name in to_serialize:
             if isinstance(getattr(self, attr_name), datetime):
-                d[attr_name] = getattr(self, attr_name).__str__()
+                nap_dict[attr_name] = getattr(self, attr_name).__str__()
             else:
-                d[attr_name] = getattr(self, attr_name)
-        return d
+                nap_dict[attr_name] = getattr(self, attr_name)
+        return nap_dict
