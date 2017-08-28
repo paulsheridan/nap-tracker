@@ -4,37 +4,40 @@ import pyramid.httpexceptions as exc
 
 from sqlalchemy import Date, cast
 
-from cornice.resource import resource
 from baby_tracker.models import Meal, User
 
+from pyramid.view import (
+view_config,
+view_defaults
+)
 
-@resource(collection_path='/meals', path='/meals/{id}')
+
+@view_defaults(renderer='json')
 class MealView(object):
 
     def __init__(self, request):
         self.request = request
         self.logged_in = request.authenticated_userid
 
-    def collection_get(self):
-        """Returns list of all meals by user"""
-        if not self.logged_in:
-            return exc.HTTPForbidden()
-        meals = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().meals
-        meals_json = [meal.to_json() for meal in meals]
-        return {'meals': meals_json}
-
+    @view_config(route_name='meals', request_method='GET')
     def get(self):
-        """Return a single meal."""
+        """Return"""
         if not self.logged_in:
             return exc.HTTPForbidden()
-        meal_id = int(self.request.matchdict['id'])
-        meal = self.request.dbsession.query(User).filter_by(
-            id=self.logged_in).first().meals.filter_by(id=meal_id).first()
-        if not meal:
-            return exc.HTTPNotFound()
-        return {'meal': meal.to_json()}
+        meal_id = self.request.matchdict['id']
+        if meal_id == '*':
+            meals = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().meals
+            meals_json = [meal.to_json() for meal in meals]
+            return {'meals': meals_json}
+        else:
+            meal = self.request.dbsession.query(User).filter_by(
+                id=self.logged_in).first().meals.filter_by(id=meal_id).first()
+            if not meal:
+                return exc.HTTPNotFound()
+            return {'meal': meal.to_json()}
 
-    def collection_post(self):
+    @view_config(route_name='meals', request_method='POST')
+    def post(self):
         """Add single meal"""
         if not self.logged_in:
             return exc.HTTPForbidden()
@@ -44,6 +47,7 @@ class MealView(object):
         self.request.dbsession.add(meal)
         return {'status': 'OK'}
 
+    @view_config(route_name='meals', request_method='PUT')
     def put(self):
         """Update a single meal entry"""
         if not self.logged_in:
@@ -60,6 +64,7 @@ class MealView(object):
             return {'meal': meal.to_json()}
         raise exc.HTTPNotFound()
 
+    @view_config(route_name='meals', request_method='DELETE')
     def delete(self):
         """Delete a single meal entry"""
         meal_id = int(self.request.matchdict['id'])
@@ -69,15 +74,8 @@ class MealView(object):
             return exc.HTTPNotFound()
         return {'status': 'OK'}
 
-
-@resource(path='/today/meals')
-class TodayMealView(object):
-
-    def __init__(self, request):
-        self.request = request
-        self.logged_in = request.authenticated_userid
-
-    def get(self):
+    @view_defaults(route_name='meals_today', request_method='GET')
+    def get_today(self):
         """Return today's meals by user."""
         if not self.logged_in:
             return exc.HTTPForbidden()

@@ -4,37 +4,40 @@ import pyramid.httpexceptions as exc
 
 from sqlalchemy import Date, cast
 
-from cornice.resource import resource
 from baby_tracker.models import Nap, User
 
+from pyramid.view import (
+view_config,
+view_defaults
+)
 
-@resource(collection_path='/naps', path='/naps/{id}')
+
+@view_defaults(renderer='json')
 class NapView(object):
 
     def __init__(self, request):
         self.request = request
         self.logged_in = request.authenticated_userid
 
-    def collection_get(self):
-        """Returns list of all naps by user"""
-        if not self.logged_in:
-            return exc.HTTPForbidden()
-        naps = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().naps
-        naps_json = [nap.to_json() for nap in naps]
-        return {'naps': naps_json}
-
+    @view_config(route_name='naps', request_method='GET')
     def get(self):
-        """Return a single nap."""
+        """Returns"""
         if not self.logged_in:
             return exc.HTTPForbidden()
-        nap_id = int(self.request.matchdict['id'])
-        nap = self.request.dbsession.query(User).filter_by(
-            id=self.logged_in).first().naps.filter_by(id=nap_id).first()
-        if not nap:
-            return exc.HTTPNotFound()
-        return {'nap': nap.to_json()}
+        nap_id = self.request.matchdict['id']
+        if nap_id == '*':
+            naps = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().naps
+            naps_json = [nap.to_json() for nap in naps]
+            return {'naps': naps_json}
+        else:
+            nap = self.request.dbsession.query(User).filter_by(
+                id=self.logged_in).first().naps.filter_by(id=nap_id).first()
+            if not nap:
+                return exc.HTTPNotFound()
+            return {'nap': nap.to_json()}
 
-    def collection_post(self):
+    @view_config(route_name='naps', request_method='POST')
+    def post(self):
         """Add single nap"""
         if not self.logged_in:
             return exc.HTTPForbidden()
@@ -44,6 +47,7 @@ class NapView(object):
         self.request.dbsession.add(nap)
         return {'status': 'OK'}
 
+    @view_config(route_name='naps', request_method='PUT')
     def put(self):
         """Update a single nap entry"""
         if not self.logged_in:
@@ -60,6 +64,7 @@ class NapView(object):
             return {'nap': nap.to_json()}
         raise exc.HTTPNotFound()
 
+    @view_config(route_name='naps', request_method='DELETE')
     def delete(self):
         """Delete a single nap entry"""
         nap_id = int(self.request.matchdict['id'])
@@ -70,14 +75,8 @@ class NapView(object):
         return {'status': 'OK'}
 
 
-@resource(path='/today/naps')
-class TodayNapView(object):
-
-    def __init__(self, request):
-        self.request = request
-        self.logged_in = request.authenticated_userid
-
-    def get(self):
+    @view_defaults(route_name='naps_today', request_method='GET')
+    def get_today(self):
         """Return today's naps by user."""
         if not self.logged_in:
             return exc.HTTPForbidden()

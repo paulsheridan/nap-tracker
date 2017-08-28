@@ -18,7 +18,6 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'waitress',
-    'cornice',
     'bcrypt',
     'pyramid_jwt',
 ]

@@ -1,13 +1,18 @@
-from cornice.resource import resource
+from pyramid.view import (
+    view_config,
+    view_defaults
+    )
+
 from baby_tracker.models import User
 
 
-@resource(path='/login')
+@view_defaults(route_name='login', renderer='json')
 class AuthView(object):
 
     def __init__(self, request):
         self.request = request
 
+    @view_config(request_method='POST')
     def post(self):
         user_id = self.authenticate()
         if user_id:
