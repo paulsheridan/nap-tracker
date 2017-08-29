@@ -19,25 +19,17 @@ class NapView(object):
         self.request = request
         self.logged_in = request.authenticated_userid
 
-    @view_config(route_name='naps', request_method='GET')
-    def get(self):
-        """Returns"""
+    @view_config(route_name='naps_wildcard', request_method='GET')
+    def get_naps(self):
+        """Returns list of all naps by user"""
         if not self.logged_in:
             return exc.HTTPForbidden()
-        nap_id = self.request.matchdict['id']
-        if nap_id == '*':
-            naps = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().naps
-            naps_json = [nap.to_json() for nap in naps]
-            return {'naps': naps_json}
-        else:
-            nap = self.request.dbsession.query(User).filter_by(
-                id=self.logged_in).first().naps.filter_by(id=nap_id).first()
-            if not nap:
-                return exc.HTTPNotFound()
-            return {'nap': nap.to_json()}
+        naps = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().naps
+        naps_json = [nap.to_json() for nap in naps]
+        return {'naps': naps_json}
 
-    @view_config(route_name='naps', request_method='POST')
-    def post(self):
+    @view_config(route_name='naps_wildcard', request_method='POST')
+    def post_nap(self):
         """Add single nap"""
         if not self.logged_in:
             return exc.HTTPForbidden()
@@ -47,8 +39,20 @@ class NapView(object):
         self.request.dbsession.add(nap)
         return {'status': 'OK'}
 
+    @view_config(route_name='naps', request_method='GET')
+    def get_nap(self):
+        """Return a single nap."""
+        if not self.logged_in:
+            return exc.HTTPForbidden()
+        nap_id = int(self.request.matchdict['id'])
+        nap = self.request.dbsession.query(User).filter_by(
+            id=self.logged_in).first().naps.filter_by(id=nap_id).first()
+        if not nap:
+            return exc.HTTPNotFound()
+        return {'nap': nap.to_json()}
+
     @view_config(route_name='naps', request_method='PUT')
-    def put(self):
+    def put_nap(self):
         """Update a single nap entry"""
         if not self.logged_in:
             return exc.HTTPForbidden()
@@ -65,7 +69,7 @@ class NapView(object):
         raise exc.HTTPNotFound()
 
     @view_config(route_name='naps', request_method='DELETE')
-    def delete(self):
+    def delete_nap(self):
         """Delete a single nap entry"""
         nap_id = int(self.request.matchdict['id'])
         nap = self.request.dbsession.query(User).filter_by(
@@ -74,9 +78,8 @@ class NapView(object):
             return exc.HTTPNotFound()
         return {'status': 'OK'}
 
-
-    @view_defaults(route_name='naps_today', request_method='GET')
-    def get_today(self):
+    @view_config(route_name='naps_today', request_method='GET')
+    def naps_today(self):
         """Return today's naps by user."""
         if not self.logged_in:
             return exc.HTTPForbidden()

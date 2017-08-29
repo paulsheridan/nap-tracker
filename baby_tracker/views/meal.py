@@ -19,25 +19,17 @@ class MealView(object):
         self.request = request
         self.logged_in = request.authenticated_userid
 
-    @view_config(route_name='meals', request_method='GET')
-    def get(self):
-        """Return"""
+    @view_config(route_name='meals_wildcard', request_method='GET')
+    def get_meals(self):
+        """Returns list of all meals by user"""
         if not self.logged_in:
             return exc.HTTPForbidden()
-        meal_id = self.request.matchdict['id']
-        if meal_id == '*':
-            meals = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().meals
-            meals_json = [meal.to_json() for meal in meals]
-            return {'meals': meals_json}
-        else:
-            meal = self.request.dbsession.query(User).filter_by(
-                id=self.logged_in).first().meals.filter_by(id=meal_id).first()
-            if not meal:
-                return exc.HTTPNotFound()
-            return {'meal': meal.to_json()}
+        meals = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().meals
+        meals_json = [meal.to_json() for meal in meals]
+        return {'meals': meals_json}
 
-    @view_config(route_name='meals', request_method='POST')
-    def post(self):
+    @view_config(route_name='meals_wildcard', request_method='POST')
+    def post_meal(self):
         """Add single meal"""
         if not self.logged_in:
             return exc.HTTPForbidden()
@@ -47,8 +39,20 @@ class MealView(object):
         self.request.dbsession.add(meal)
         return {'status': 'OK'}
 
+    @view_config(route_name='meals', request_method='GET')
+    def get_meal(self):
+        """Return a single meal."""
+        if not self.logged_in:
+            return exc.HTTPForbidden()
+        meal_id = int(self.request.matchdict['id'])
+        meal = self.request.dbsession.query(User).filter_by(
+            id=self.logged_in).first().meals.filter_by(id=meal_id).first()
+        if not meal:
+            return exc.HTTPNotFound()
+        return {'meal': meal.to_json()}
+
     @view_config(route_name='meals', request_method='PUT')
-    def put(self):
+    def put_meal(self):
         """Update a single meal entry"""
         if not self.logged_in:
             return exc.HTTPForbidden()
@@ -65,7 +69,7 @@ class MealView(object):
         raise exc.HTTPNotFound()
 
     @view_config(route_name='meals', request_method='DELETE')
-    def delete(self):
+    def delete_meal(self):
         """Delete a single meal entry"""
         meal_id = int(self.request.matchdict['id'])
         meal = self.request.dbsession.query(User).filter_by(
@@ -74,8 +78,8 @@ class MealView(object):
             return exc.HTTPNotFound()
         return {'status': 'OK'}
 
-    @view_defaults(route_name='meals_today', request_method='GET')
-    def get_today(self):
+    @view_config(route_name='meals_today', request_method='GET')
+    def meals_today(self):
         """Return today's meals by user."""
         if not self.logged_in:
             return exc.HTTPForbidden()
