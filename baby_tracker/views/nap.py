@@ -37,7 +37,8 @@ class NapView(object):
         nap = Nap.from_json(nap_json)
         nap.user_id = self.logged_in
         self.request.dbsession.add(nap)
-        return {'status': 'OK'}
+        self.request.dbsession.flush()
+        return {'id': nap.id}
 
     @view_config(route_name='naps', request_method='GET')
     def get_nap(self):

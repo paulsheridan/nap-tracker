@@ -37,7 +37,8 @@ class MealView(object):
         meal = Meal.from_json(meal_json)
         meal.user_id = self.logged_in
         self.request.dbsession.add(meal)
-        return {'status': 'OK'}
+        self.request.dbsession.flush()
+        return {'id': meal.id}
 
     @view_config(route_name='meals', request_method='GET')
     def get_meal(self):
