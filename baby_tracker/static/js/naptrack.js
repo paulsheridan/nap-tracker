@@ -1,7 +1,47 @@
+var timedifference = new Date().getTimezoneOffset();
 window.onload=function() {
   // Month,Day,Year,Hour,Minute,Second
-  upTime('jan,01,2014,00:00:00'); // ****** Change this line!
+  // upTime('jan,01,2014,00:00:00'); // ****** Change this line!
 }
+
+function login() {
+  $.ajax({
+    type: "POST",
+    url: "/login",
+    data: JSON.stringify({"email": "new@guy.com", "password": "new"}),
+    dataType: "text",
+    success: function(response){
+      console.log('logged in')
+    }
+  });
+}
+
+function getLastNap() {
+  $.ajax({
+    type: "GET",
+    url: "/today/naps",
+    success: function(response){
+      for(var i = 0; i < response.length; i++) {
+        var obj = response[i];
+        console.log(obj.id);
+      }
+    }
+  });
+}
+
+function getLastMeal() {
+  $.ajax({
+    type: "GET",
+    url: "/today/meals",
+    success: function(response){
+      for(var i = 0; i < response.length; i++) {
+        var obj = response[i];
+        console.log(obj.id);
+      }
+    }
+  });
+}
+
 function upTime(countTo) {
   now = new Date();
   countTo = new Date(countTo);
@@ -20,3 +60,13 @@ function upTime(countTo) {
   clearTimeout(upTime.to);
   upTime.to=setTimeout(function(){ upTime(countTo); },1000);
 }
+
+$(document).ready(function() {
+  console.log('hello')
+  login()
+  getLastMeal()
+  getLastNap()
+  // $('#btn-refresh').click(function() {
+  //     getDevices();
+  // });
+});

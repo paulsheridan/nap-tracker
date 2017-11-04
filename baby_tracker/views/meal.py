@@ -26,7 +26,7 @@ class MealView(object):
             return exc.HTTPForbidden()
         meals = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().meals
         meals_json = [meal.to_json() for meal in meals]
-        return {'meals': meals_json}
+        return meals_json
 
     @view_config(route_name='meals_wildcard', request_method='POST')
     def post_meal(self):
@@ -50,7 +50,7 @@ class MealView(object):
             id=self.logged_in).first().meals.filter_by(id=meal_id).first()
         if not meal:
             return exc.HTTPNotFound()
-        return {'meal': meal.to_json()}
+        return meal.to_json()
 
     @view_config(route_name='meals', request_method='PUT')
     def put_meal(self):
@@ -66,7 +66,7 @@ class MealView(object):
                 if args[key] is not None:
                     setattr(meal, key, value)
             transaction.commit()
-            return {'meal': meal.to_json()}
+            return meal.to_json()
         raise exc.HTTPNotFound()
 
     @view_config(route_name='meals', request_method='DELETE')
@@ -85,6 +85,6 @@ class MealView(object):
         if not self.logged_in:
             return exc.HTTPForbidden()
         meals = self.request.dbsession.query(User).filter_by(
-            id=self.logged_in).first().meals.filter(cast(Meal.time, Date) == datetime.date.today())
+            id=self.logged_in).first().meals.filter(cast(Meal.time, Date) == datetime.datetime.utcnow().date())
         meals_json = [meal.to_json() for meal in meals]
-        return {'meals': meals_json}
+        return meals_json

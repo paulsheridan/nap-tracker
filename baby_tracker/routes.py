@@ -1,5 +1,6 @@
 def includeme(config):
     config.add_route('index_page', '/')
+    config.add_route('signup_page', '/signup')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.add_route('meals_today', '/today/meals')

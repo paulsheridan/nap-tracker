@@ -20,12 +20,10 @@
   </head>
 
   <body id="page-top">
-
-    <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="#page-top">NapTrack</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Login
           <i class="fa fa-user"></i>
         </button>
@@ -50,75 +48,42 @@
             <a class="btn btn-primary btn-block" href="index.html">Login</a>
           </form>
           <div class="text-center">
-            <a class="d-block small mt-3" href="/signup">Register an Account</a>
+            <a class="d-block small mt-3" href="register.html">Register an Account</a>
             <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
           </div>
-        </div>
+        </div> -->
       </div>
     </nav>
 
-    <header class="masthead">
-      <div class="container h-100">
-        <div class="row h-100">
-          <div class="col-lg-7 my-auto">
-            <div class="header-content mx-auto">
-              <h1 class="mb-5">NapTrack tracks naps.  Hopefully someone more clever will write something meaningful here someday.</h1>
-              <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">Create An Account</a>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+          <div class="login-panel panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Join NapTrack Today</h3>
+            </div>
+            <div class="panel-body">
+              <form role="form">
+                <fieldset>
+                  <div class="form-group">
+                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                  </div>
+                  <a class="btn btn-primary btn-block" href="/">Sign Up</a>
+                </fieldset>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    </header>
-
-    <section class="features" id="features">
-      <div class="container">
-        <div class="section-heading text-center">
-          <h2>Timers</h2>
-          <div id="countup">
-            It's been
-            <p id="days">00</p>
-            <p class="timeRefDays">days</p>
-            <p id="hours">00</p>
-            <p class="timeRefHours">hours</p>
-            <p id="minutes">00</p>
-            <p class="timeRefMinutes">minutes</p>
-            <p id="seconds">00</p>
-            <p class="timeRefSeconds">second</p>
-          </div>
-          <hr>
-        </div>
-        <div class="row">
-          <div class="col-lg-8 my-auto">
-            <div class="container-fluid">
-              <div class="row">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <div class="container">
-        <p>&copy; 2017 Start Bootstrap. All Rights Reserved.</p>
-        <ul class="list-inline">
-          <li class="list-inline-item">
-            <a href="#">Privacy</a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#">Terms</a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#">FAQ</a>
-          </li>
-        </ul>
-      </div>
-    </footer>
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/popper/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/naptrack.js"></script>
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="js/new-age.min.js"></script>
+    </div>
   </body>
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/popper/popper.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="js/naptrack.js"></script>
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="js/new-age.min.js"></script>
 </html>

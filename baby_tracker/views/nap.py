@@ -26,7 +26,7 @@ class NapView(object):
             return exc.HTTPForbidden()
         naps = self.request.dbsession.query(User).filter_by(id=self.logged_in).first().naps
         naps_json = [nap.to_json() for nap in naps]
-        return {'naps': naps_json}
+        return naps_json
 
     @view_config(route_name='naps_wildcard', request_method='POST')
     def post_nap(self):
@@ -50,7 +50,7 @@ class NapView(object):
             id=self.logged_in).first().naps.filter_by(id=nap_id).first()
         if not nap:
             return exc.HTTPNotFound()
-        return {'nap': nap.to_json()}
+        return nap.to_json()
 
     @view_config(route_name='naps', request_method='PUT')
     def put_nap(self):
@@ -66,7 +66,7 @@ class NapView(object):
                 if args[key] is not None:
                     setattr(nap, key, value)
             transaction.commit()
-            return {'nap': nap.to_json()}
+            return nap.to_json()
         raise exc.HTTPNotFound()
 
     @view_config(route_name='naps', request_method='DELETE')
@@ -86,6 +86,6 @@ class NapView(object):
             return exc.HTTPForbidden()
         naps = self.request.dbsession.query(User).filter_by(
             id=self.logged_in).first().naps.filter(
-                cast(Nap.start, Date) == datetime.date.today())
+                cast(Nap.start, Date) == datetime.datetime.utcnow().date())
         naps_json = [nap.to_json() for nap in naps]
-        return {'naps': naps_json}
+        return naps_json
