@@ -1,6 +1,7 @@
 def includeme(config):
     config.add_route('index_page', '/')
     config.add_route('signup_page', '/signup')
+    config.add_route('timers_page', '/timers')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.add_route('meals_today', '/today/meals')
@@ -14,4 +15,5 @@ def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('js', 'baby_tracker:static/js')
     config.add_static_view('css', 'baby_tracker:static/css')
+    config.add_static_view('img', 'baby_tracker:static/img')
     config.add_static_view('vendor', 'baby_tracker:static/vendor')

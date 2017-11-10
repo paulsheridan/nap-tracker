@@ -7,3 +7,7 @@ def index_view(request):
 @view_config(route_name='signup_page', renderer='baby_tracker:templates/signup.jinja2')
 def signup_view(request):
     return {}
+
+@view_config(route_name='timers_page', renderer='baby_tracker:templates/timers.jinja2')
+def signup_view(request):
+    return {}
