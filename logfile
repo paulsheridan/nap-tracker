@@ -1,0 +1,11 @@
+2018-04-09 07:34:39.289 PDT [35439] LOG:  listening on IPv6 address "::1", port 5432
+2018-04-09 07:34:39.289 PDT [35439] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2018-04-09 07:34:39.290 PDT [35439] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2018-04-09 07:34:39.300 PDT [35440] LOG:  database system was shut down at 2018-04-09 07:34:33 PDT
+2018-04-09 07:34:39.304 PDT [35439] LOG:  database system is ready to accept connections
+2018-04-09 07:34:48.962 PDT [35477] FATAL:  database "paul.sheridan" does not exist
+2018-04-09 07:35:30.113 PDT [35601] FATAL:  role "naptrack" does not exist
+2018-04-09 07:37:10.109 PDT [35672] ERROR:  role "naptrack" already exists
+2018-04-09 07:37:10.109 PDT [35672] STATEMENT:  CREATE USER naptrack;
+2018-04-09 07:37:26.234 PDT [35743] FATAL:  role "naptrack" is not permitted to log in
+2018-04-09 07:38:18.867 PDT [35814] FATAL:  database "naptrackdb" does not exist

@@ -40,6 +40,9 @@ function getLastMeal() {
     type: "GET",
     url: "/today/meals",
     success: function(response){
+      if (response.length == 0) {
+        
+      }
       for(var i = 0; i < response.length; i++) {
         var obj = response[i];
         console.log(obj.id);
