@@ -47,6 +47,10 @@ def main(argv=sys.argv):
 
         user = User(email='test@test.com')
         user.hash_password('secret')
-        nap = Nap(start=datetime.datetime.utcnow(), end=datetime.datetime.utcnow() + datetime.timedelta(hours=1), user_id=1)
+        nap = Nap(
+            start=datetime.datetime.utcnow(),
+            end=datetime.datetime.utcnow() + datetime.timedelta(hours=1),
+            user_id=1
+            )
         dbsession.add(user)
         dbsession.add(nap)

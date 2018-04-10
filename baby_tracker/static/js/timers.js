@@ -35,25 +35,25 @@ function getLastNap() {
   });
 }
 
-function getLastMeal() {
-  $.ajax({
-    type: "GET",
-    url: "/today/meals",
-    success: function(response){
-      if (response.length == 0) {
-        
-      }
-      for(var i = 0; i < response.length; i++) {
-        var obj = response[i];
-        console.log(obj.id);
-      }
-    }
-  });
-}
+// function getLastMeal() {
+//   $.ajax({
+//     type: "GET",
+//     url: "/today/meals",
+//     success: function(response){
+//       if (response.length == 0) {
+//
+//       }
+//       for(var i = 0; i < response.length; i++) {
+//         var obj = response[i];
+//         console.log(obj.id);
+//       }
+//     }
+//   });
+// }
 
 $(document).ready(function() {
   console.log('hello')
-  getLastMeal()
+  // getLastMeal()
   getLastNap()
   // $('#btn-refresh').click(function() {
   //     getDevices();
