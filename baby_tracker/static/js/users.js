@@ -21,6 +21,19 @@ function logout() {
   });
 }
 
+function signup() {
+  var jsonData = getFormData($("#signup-form"))
+  $.ajax({
+    type: "POST",
+    url: "/users",
+    data: JSON.stringify(jsonData),
+    dataType: "text",
+    success: function(response){
+      location.href = "timers"
+    }
+  });
+}
+
 function getFormData($form){
   var unindexed_array = $form.serializeArray();
   var indexed_array = {};
@@ -36,5 +49,8 @@ $(document).ready(function() {
   });
   $('#btn-logout').click(function() {
       logout();
+  });
+  $('#btn-signup').click(function() {
+      signup();
   });
 });

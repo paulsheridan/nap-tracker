@@ -29,7 +29,7 @@ class UserView(object):
         raise exc.HTTPNotFound()
 
     @view_config(request_method='POST')
-    def collection_post(self):
+    def post(self):
         """Add single user"""
         user_json = self.request.json
         user = User.from_json(user_json)
@@ -38,7 +38,7 @@ class UserView(object):
         return {'status': 'OK'}
 
     @view_config(request_method='PUT')
-    def put(self):
+    def update(self):
         """Update a single user entry"""
         user_id = int(self.request.matchdict['id'])
         if not self.logged_in or user_id != self.logged_in:
