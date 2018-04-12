@@ -7,6 +7,10 @@ function login() {
     dataType: "text",
     success: function(response){
       location.href = "timers"
+    },
+    error: function(response){
+      console.log("bad password")
+      $("#login-error").show()
     }
   });
 }
@@ -35,12 +39,12 @@ function signup() {
 }
 
 function getFormData($form){
-  var unindexed_array = $form.serializeArray();
-  var indexed_array = {};
-  $.map(unindexed_array, function(n, i){
-      indexed_array[n['name']] = n['value'];
+  var unindexedArray = $form.serializeArray();
+  var indexedArray = {};
+  $.map(unindexedArray, function(n, i){
+      indexedArray[n['name']] = n['value'];
   });
-  return indexed_array;
+  return indexedArray;
 }
 
 $(document).ready(function() {
@@ -53,4 +57,13 @@ $(document).ready(function() {
   $('#btn-signup').click(function() {
       signup();
   });
+
+  if (document.cookie.indexOf('auth_tkt') == -1 ) {
+    $("#header-account").hide
+    $("#header-signin").show
+  }
+  else {
+    $("#header-signin").hide
+    $("#header-account").show
+  }
 });
