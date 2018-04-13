@@ -59,11 +59,11 @@ $(document).ready(function() {
   });
 
   if (document.cookie.indexOf('auth_tkt') == -1 ) {
-    $("#header-account").hide
-    $("#header-signin").show
+    $(".nav-login").show()
+    console.log('not found')
   }
   else {
-    $("#header-signin").hide
-    $("#header-account").show
+    $(".nav-user").show()
+    console.log('found')
   }
 });

@@ -7,3 +7,11 @@
 .navbar-drawer {
   background: #ffffff;;
 }
+
+.nav-user {
+  display: none;
+}
+
+.nav-login {
+  display: none;
+}
