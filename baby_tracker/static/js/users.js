@@ -9,7 +9,7 @@ function login() {
       location.href = "timers"
     },
     error: function(response){
-      console.log("bad password")
+      // TODO: implement this in the HTML
       $("#login-error").show()
     }
   });
@@ -32,8 +32,14 @@ function signup() {
     url: "/users",
     data: JSON.stringify(jsonData),
     dataType: "text",
+    statusCode: {
+      400: function() {
+        // TODO: implement this in the HTML
+        $("#email-exists").show();
+      }
+    },
     success: function(response){
-      location.href = "timers"
+      location.href = "/"
     }
   });
 }
@@ -60,10 +66,8 @@ $(document).ready(function() {
 
   if (document.cookie.indexOf('auth_tkt') == -1 ) {
     $(".nav-login").show()
-    console.log('not found')
   }
   else {
     $(".nav-user").show()
-    console.log('found')
   }
 });

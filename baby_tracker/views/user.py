@@ -1,4 +1,3 @@
-import datetime
 import transaction
 import pyramid.httpexceptions as exc
 
@@ -8,6 +7,7 @@ from pyramid.view import (
     )
 
 from baby_tracker.models import User
+import sqlalchemy.exc as sql_exc
 
 
 @view_defaults(route_name='users', renderer='json')
@@ -34,7 +34,11 @@ class UserView(object):
         user_json = self.request.json
         user = User.from_json(user_json)
         user.hash_password(user_json['password'])
-        self.request.dbsession.add(user)
+        try:
+            self.request.dbsession.add(user)
+            self.request.dbsession.flush()
+        except sql_exc.IntegrityError:
+            return exc.HTTPBadRequest()
         return {'status': 'OK'}
 
     @view_config(request_method='PUT')
