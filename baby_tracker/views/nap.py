@@ -43,16 +43,14 @@ class NapView(object):
             return nap.to_json()
         raise exc.HTTPNotFound()
 
-    @view_config(route_name='naps_today', request_method='GET')
-    def naps_today(self):
-        """Return today's naps by user."""
+    @view_config(route_name='current_nap', request_method='GET')
+    def current_nap(self):
+        """Return the most recent nap by user."""
         if not self.logged_in:
             return exc.HTTPForbidden()
-        naps = self.request.dbsession.query(User).filter_by(
-            id=self.logged_in).first().naps.filter(
-                cast(Nap.start, Date) == datetime.datetime.utcnow().date())
-        naps_json = [nap.to_json() for nap in naps]
-        return naps_json
+        nap = self.request.dbsession.query(User).filter_by(
+            id=self.logged_in).first().naps.order_by(Nap.id.desc()).first()
+        return nap.to_json()
 
     # @view_config(route_name='naps_wildcard', request_method='POST')
     # def post_nap(self):
@@ -77,7 +75,7 @@ class NapView(object):
     #
     # @view_config(route_name='naps_edit', request_method='GET')
     # def get_nap(self):
-    #     """Return a single nap."""
+    #     """Return a single nap by id."""
     #     if not self.logged_in:
     #         return exc.HTTPForbidden()
     #     nap_id = int(self.request.matchdict['id'])
@@ -113,3 +111,14 @@ class NapView(object):
     #     if not nap:
     #         return exc.HTTPNotFound()
     #     return {'status': 'OK'}
+    #
+    # @view_config(route_name='naps_today', request_method='GET')
+    # def naps_today(self):
+    #     """Return today's naps by user."""
+    #     if not self.logged_in:
+    #         return exc.HTTPForbidden()
+    #     naps = self.request.dbsession.query(User).filter_by(
+    #         id=self.logged_in).first().naps.filter(
+    #             cast(Nap.start, Date) == datetime.datetime.utcnow().date())
+    #     naps_json = [nap.to_json() for nap in naps]
+    #     return naps_json

@@ -25,37 +25,27 @@ function upTime(countTo) {
 function getLastNap() {
   $.ajax({
     type: "GET",
-    url: "/today/naps",
+    url: "/nap/current",
     success: function(response){
-      for(var i = 0; i < response.length; i++) {
-        var obj = response[i];
-        console.log(obj.id);
-      }
+      console.log(response)
     }
   });
 }
 
-// function getLastMeal() {
-//   $.ajax({
-//     type: "GET",
-//     url: "/today/meals",
-//     success: function(response){
-//       if (response.length == 0) {
-//
-//       }
-//       for(var i = 0; i < response.length; i++) {
-//         var obj = response[i];
-//         console.log(obj.id);
-//       }
-//     }
-//   });
-// }
+function startNap() {
+  $.ajax({
+    type: "POST",
+    url: "/nap/start",
+    success: function(response){
+      console.log('nap started')
+    }
+  });
+}
 
 $(document).ready(function() {
   console.log('hello')
-  // getLastMeal()
   getLastNap()
-  // $('#btn-refresh').click(function() {
-  //     getDevices();
-  // });
+  $('#btn-timer-start').click(function() {
+      startNap();
+  });
 });
