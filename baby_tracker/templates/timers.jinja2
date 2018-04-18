@@ -12,6 +12,8 @@
                 <div class="caption-content">
                 <div id="countup">
                   It's been
+                  <p id="days">00</p>
+                  <p class="timeRefDays">days</p>
                   <p id="hours">00</p>
                   <p class="timeRefHours">hours</p>
                   <p id="minutes">00</p>
@@ -29,26 +31,6 @@
               Start Timer
             </a>
           </div>
-          <!-- <div class="col-sm-4 portfolio-item">
-            <h2>Last Meal</h2>
-            <a class="portfolio-link" href="#portfolioModal2" data-toggle="modal">
-              <div class="caption">
-                <div class="caption-content">
-                <div id="countup">
-                  It's been
-                  <p id="days">00</p>
-                  <p class="timeRefDays">days</p>
-                  <p id="hours">00</p>
-                  <p class="timeRefHours">hours</p>
-                  <p id="minutes">00</p>
-                  <p class="timeRefMinutes">minutes</p>
-                  <p id="seconds">00</p>
-                  <p class="timeRefSeconds">second</p>
-                </div>
-                </div>
-              </div>
-            </a>
-          </div> -->
         </div>
       </div>
     </section>
@@ -58,5 +40,6 @@
 {% endblock %}
 
 {% block logic %}
+  <script src="vendor/moment/moment.min.js"></script>
   <script src="js/timers.js"></script>
 {% endblock %}

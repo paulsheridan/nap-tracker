@@ -21,7 +21,7 @@ class NapView(object):
 
     @view_config(route_name='start_nap', request_method='POST')
     def start_nap(self):
-        """Start a single nap"""
+        """Start a single nap."""
         if not self.logged_in:
             return exc.HTTPForbidden()
         nap = Nap(start=datetime.datetime.utcnow())
@@ -32,7 +32,7 @@ class NapView(object):
 
     @view_config(route_name='end_nap', request_method='PUT')
     def end_nap(self):
-        """End current single nap"""
+        """End current single nap or raise 404 if no current nap."""
         if not self.logged_in:
             return exc.HTTPForbidden()
         nap = self.request.dbsession.query(User).filter_by(

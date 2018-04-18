@@ -28,7 +28,7 @@ class Nap(Base):
         nap_dict = {}
         for attr_name in to_serialize:
             if isinstance(getattr(self, attr_name), datetime):
-                nap_dict[attr_name] = getattr(self, attr_name).__str__()
+                nap_dict[attr_name] = getattr(self, attr_name).__str__() + ' UTC'
             else:
                 nap_dict[attr_name] = getattr(self, attr_name)
         return nap_dict
