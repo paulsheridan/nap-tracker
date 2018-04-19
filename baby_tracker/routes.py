@@ -11,8 +11,8 @@ def includeme(config):
     config.add_route('start_nap', '/nap/start')
     config.add_route('end_nap', '/nap/end')
     config.add_route('current_nap', '/nap/current')
+    config.add_route('naps_today', '/today/naps')
 
-    # config.add_route('naps_today', '/today/naps')
     # config.add_route('naps', '/naps/{id}')
     # config.add_route('naps_wildcard', '/naps')
 

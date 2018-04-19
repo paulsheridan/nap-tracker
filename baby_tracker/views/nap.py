@@ -52,6 +52,18 @@ class NapView(object):
             id=self.logged_in).first().naps.order_by(Nap.id.desc()).first()
         return nap.to_json()
 
+    @view_config(route_name='naps_today', request_method='GET')
+    def naps_today(self):
+        """Return today's naps by user."""
+        if not self.logged_in:
+            return exc.HTTPForbidden()
+        naps = self.request.dbsession.query(User).filter_by(
+            id=self.logged_in).first().naps.filter(
+                cast(Nap.start, Date) == datetime.datetime.utcnow().date())
+        naps_json = [nap.to_json() for nap in naps]
+        return naps_json
+
+
     # @view_config(route_name='naps_wildcard', request_method='POST')
     # def post_nap(self):
     #     """Add single nap"""
@@ -111,14 +123,3 @@ class NapView(object):
     #     if not nap:
     #         return exc.HTTPNotFound()
     #     return {'status': 'OK'}
-    #
-    # @view_config(route_name='naps_today', request_method='GET')
-    # def naps_today(self):
-    #     """Return today's naps by user."""
-    #     if not self.logged_in:
-    #         return exc.HTTPForbidden()
-    #     naps = self.request.dbsession.query(User).filter_by(
-    #         id=self.logged_in).first().naps.filter(
-    #             cast(Nap.start, Date) == datetime.datetime.utcnow().date())
-    #     naps_json = [nap.to_json() for nap in naps]
-    #     return naps_json
