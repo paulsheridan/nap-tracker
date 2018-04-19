@@ -5,9 +5,9 @@
         <h2 class="text-center">Timers</h2>
         <hr class="star-primary">
         <div class="row">
-          <div class="col-sm-4 portfolio-item">
-            <h3>Last Nap</h3>
-            <a class="portfolio-link" href="#portfolioModal1" data-toggle="modal">
+          <div class="col-sm-4 portfolio-item timer-end">
+            <h3>Current Nap:</h3>
+            <a class="current-timer">
               <div class="caption">
                 <div class="caption-content">
                 <div id="countup">
@@ -25,10 +25,19 @@
               </div>
             </a>
           </div>
+          <div class="col-sm-4 portfolio-item timer-start">
+            <h3>Last Nap:</h3>
+            <a id="previous-timer">
+            </a>
+          </div>
           <div class="text-center mt-4">
-            <a class="btn btn-xl btn-outline-light" id="btn-timer-start">
+            <a class="btn btn-xl btn-outline-light timer-start">
               <i class="fa fa-download mr-2"></i>
               Start Timer
+            </a>
+            <a class="btn btn-xl btn-outline-light timer-end">
+              <i class="fa fa-download mr-2"></i>
+              Stop Timer
             </a>
           </div>
         </div>
