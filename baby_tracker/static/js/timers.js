@@ -42,7 +42,13 @@ function getLastNap() {
 function listLastNap(response) {
   $('#previous-timer').empty();
   timeArr = formatTime(new Date(response.end) - new Date(response.start))
-  $('#previous-timer').append(document.createTextNode(timeArr));
+  for (var i = 0; i < timeArr.length; i++) {
+    li = $('<li/>')
+    li.text(timeArr[i])
+    li.addClass('previous-naps')
+    $('#previous-timer').append(li);
+
+  }
 }
 
 function startNap() {
