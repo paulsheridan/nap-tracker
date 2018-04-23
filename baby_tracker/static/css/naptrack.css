@@ -23,3 +23,13 @@
 .timer-end {
   display: none;
 }
+
+#wrong-pass {
+  background: #ff0000;
+  display: none;
+}
+
+#email-exist {
+  background: #ff0000;
+  display: none;
+}

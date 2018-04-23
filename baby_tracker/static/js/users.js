@@ -10,7 +10,7 @@ function login() {
     },
     error: function(response){
       // TODO: implement this in the HTML
-      $("#login-error").show()
+      $("#wrong-pass").show()
     }
   });
 }
@@ -34,8 +34,7 @@ function signup() {
     dataType: "text",
     statusCode: {
       400: function() {
-        // TODO: implement this in the HTML
-        $("#email-exists").show();
+        $("#email-exist").show();
       }
     },
     success: function(response){
