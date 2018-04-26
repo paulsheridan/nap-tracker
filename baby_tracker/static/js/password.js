@@ -15,10 +15,22 @@ function resetPassword(secret) {
     url: "/reset/password",
     data: JSON.stringify(jsonData),
     dataType: "text",
-    success: function(response) {
-      $("#reset-success").show();
-      $(".form-control").val("");
-    },
+    statusCode: {
+      200: function() {
+        $("#reset-success").show();
+        $(".form-control").val("");
+      },
+      // Bad Request error handling displays a 'password too short or contains spaces' error
+      400: function() {
+        $("#bad-password").show();
+        $(".form-control").val("");
+      },
+      // Unauthorized error handling displays a 'reset secret not valid, please request another' error
+      401: function() {
+        $("#bad-code").show();
+        $(".form-control").val("");
+      },
+    }
   });
 }
 

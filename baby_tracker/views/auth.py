@@ -65,16 +65,16 @@ class AuthView(object):
 
     @view_config(route_name='reset_password', request_method='POST')
     def reset_password(self):
-        # TODO: implement password rules and add them to model
         """Request user password reset email"""
         reset_secret = self.request.json['reset_secret']
         new_pass = self.request.json['password']
         user = self.request.dbsession.query(User).filter_by(reset_secret=reset_secret).first()
-        if user is not None:
-            if user.reset_expire > datetime.datetime.utcnow():
+        if user is not None and user.reset_expire > datetime.datetime.utcnow():
+            try:
                 user.hash_password(new_pass)
-                user.clear_secret()
-                transaction.commit()
-                return {'status': 'OK'}
-            return exc.HTTPBadRequest()
-        raise exc.HTTPNotFound()
+            except ValueError:
+                return exc.HTTPBadRequest()
+            user.clear_secret()
+            transaction.commit()
+            return {'status': 'OK'}
+        return exc.HTTPUnauthorized()

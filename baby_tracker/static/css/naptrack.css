@@ -43,3 +43,13 @@
   background: #008000;
   display: none;
 }
+
+#bad-password {
+  background: #ff0000;
+  display: none;
+}
+
+#bad-code {
+  background: #ff0000;
+  display: none;
+}

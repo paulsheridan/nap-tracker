@@ -29,6 +29,8 @@ class User(Base):
     naps = relationship('Nap', backref='user', lazy='dynamic')
 
     def hash_password(self, pw):
+        if not validate_password(pw):
+            raise ValueError
         self.password = bcrypt.hashpw(pw.encode('utf8'), bcrypt.gensalt())
         return self.password.decode('utf8')
 
@@ -58,3 +60,9 @@ class User(Base):
             else:
                 d[attr_name] = getattr(self, attr_name)
         return d
+
+
+def validate_password(pw):
+    if len(pw) < 6 or ' ' in pw:
+        return False
+    return True
