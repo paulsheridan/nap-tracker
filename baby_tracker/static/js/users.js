@@ -6,10 +6,9 @@ function login() {
     data: JSON.stringify(jsonData),
     dataType: "text",
     success: function(response){
-      location.href = "timers"
+      location.href = "/timers"
     },
     error: function(response){
-      // TODO: implement this in the HTML
       $("#wrong-pass").show()
     }
   });

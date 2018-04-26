@@ -33,3 +33,13 @@
   background: #ff0000;
   display: none;
 }
+
+#reset-success {
+  background: #008000;
+  display: none;
+}
+
+#link-success {
+  background: #008000;
+  display: none;
+}

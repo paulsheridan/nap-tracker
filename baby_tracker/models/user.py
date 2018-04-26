@@ -1,6 +1,8 @@
+import random
+import string
+import datetime
 import bcrypt
 
-import datetime
 from sqlalchemy import (
     Column,
     Integer,
@@ -19,6 +21,8 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(Unicode(255), unique=True, nullable=False)
     password = Column(LargeBinary, nullable=False)
+    reset_secret = Column(Unicode(255))
+    reset_expire = Column(DateTime)
     last_logged = Column(DateTime, default=datetime.datetime.utcnow)
 
     meals = relationship('Meal', backref='user', lazy='dynamic')
@@ -31,6 +35,15 @@ class User(Base):
     def check_password(self, pw):
         expected_hash = self.password
         return bcrypt.checkpw(pw.encode('utf8'), expected_hash)
+
+    def generate_secret(self):
+        self.reset_secret = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(16))
+        self.reset_expire = datetime.datetime.now() + datetime.timedelta(days=3)
+        return self.reset_secret
+
+    def clear_secret(self):
+        self.reset_secret = ''
+        return self.reset_secret
 
     @classmethod
     def from_json(cls, data):

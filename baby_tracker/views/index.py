@@ -29,5 +29,22 @@ class PageView(object):
 
     @view_config(route_name='signup', renderer='baby_tracker:templates/signup.jinja2')
     def signup_view(self):
-        """Retrieve the signupå page"""
+        """Retrieve the signup page"""
+        return {}
+
+    @view_config(route_name='reset_email_form', renderer='baby_tracker:templates/pw_email.jinja2')
+    def reset_email_form(self):
+        """
+        Retrieve the initial password reset page
+        This page will request the user's email
+        and if a matching email is found, an email will
+        be sent with a password reset link.
+        """
+        # TODO: Move this into the auth file maybe?
+        return {}
+
+    @view_config(route_name='new_password_form', renderer='baby_tracker:templates/pw_reset.jinja2')
+    def new_password_form(self):
+        """Retrieve the password reset prompt page"""
+        # TODO: Move this into the auth file maybe?
         return {}
