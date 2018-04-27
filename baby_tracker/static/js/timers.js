@@ -25,7 +25,7 @@ function getLastNap() {
   $.ajax({
     type: "GET",
     url: "/nap/current",
-    success: function(response){
+    success: function(response) {
       if (response.end) {
         listLastNap(response)
         $('.timer-start').show();
@@ -55,7 +55,7 @@ function startNap() {
   $.ajax({
     type: "POST",
     url: "/nap/start",
-    success: function(){
+    success: function() {
       getLastNap();
     }
   });
@@ -65,7 +65,7 @@ function endNap() {
   $.ajax({
     type: "PUT",
     url: "/nap/end",
-    success: function(){
+    success: function() {
       getLastNap();
     }
   });

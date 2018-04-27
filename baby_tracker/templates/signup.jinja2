@@ -11,13 +11,18 @@
             <form role="form" id="signup-form">
               <fieldset>
                 <div class="form-group">
-                  <label id="email-exist">That email exists already</label>
+                  <label class="msg-red" id="email-exist">That email exists already</label>
+                  <label class="msg-red" id="pw-not-match">Passwords do not match</label>
+                  <label class="msg-red" id="bad-password">Please ensure your password is at least 6 characters long and contains no spaces.</label>
                 </div>
                 <div class="form-group">
                   <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
                 </div>
                 <div class="form-group">
-                  <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                  <input class="form-control form-pw" placeholder="Password" name="password" type="password" value="">
+                </div>
+                <div class="form-group">
+                  <input class="form-control form-pw" placeholder="Password Again" name="passwordagain" type="password" value="">
                 </div>
                 <input class="btn btn-primary btn-block" type="submit"value="Sign Up">
               </fieldset>

@@ -24,32 +24,12 @@
   display: none;
 }
 
-#wrong-pass {
+.msg-red {
   background: #ff0000;
   display: none;
 }
 
-#email-exist {
-  background: #ff0000;
-  display: none;
-}
-
-#reset-success {
+.msg-green {
   background: #008000;
-  display: none;
-}
-
-#link-success {
-  background: #008000;
-  display: none;
-}
-
-#bad-password {
-  background: #ff0000;
-  display: none;
-}
-
-#bad-code {
-  background: #ff0000;
   display: none;
 }

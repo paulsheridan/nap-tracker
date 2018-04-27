@@ -33,12 +33,15 @@ class UserView(object):
         """Add single user"""
         user_json = self.request.json
         user = User.from_json(user_json)
-        user.hash_password(user_json['password'])
+        try:
+            user.hash_password(user_json['password'])
+        except ValueError:
+            return exc.HTTPBadRequest()
         try:
             self.request.dbsession.add(user)
             self.request.dbsession.flush()
         except sql_exc.IntegrityError:
-            return exc.HTTPBadRequest()
+            return exc.HTTPConflict()
         return {'status': 'OK'}
 
     @view_config(request_method='PUT')
