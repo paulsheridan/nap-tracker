@@ -52,14 +52,16 @@ function getFormData($form){
 }
 
 $(document).ready(function() {
-  $('#btn-login').click(function() {
-      login();
+  $("#login-form").submit(function(e) {
+    e.preventDefault();
+    login();
   });
   $('#btn-logout').click(function() {
       logout();
   });
-  $('#btn-signup').click(function() {
-      signup();
+  $("#signup-form").submit(function(e) {
+    e.preventDefault();
+    signup();
   });
 
   if (document.cookie.indexOf('auth_tkt') == -1 ) {
